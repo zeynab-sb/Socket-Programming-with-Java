@@ -10,16 +10,18 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.HashMap;
+import static UDPServer.UDPServer.TCPUDPPort;
+
 
 public class ClientThread implements Runnable{
 
-    static public int port = 20002;
     DatagramSocket clientSocket;
     HashMap<String, Client> friends = new HashMap<>();
     String clientName;
 
-    public ClientThread(String clientName) throws SocketException {
-        clientSocket = new DatagramSocket(port++);
+    public ClientThread(String clientName, int port) throws SocketException {
+        TCPUDPPort = port;
+        clientSocket = new DatagramSocket(port);
         this.clientName = clientName;
     }
 

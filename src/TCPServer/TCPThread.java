@@ -5,7 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import static UDPClient.ClientThread.port;
+
+import static UDPServer.UDPServer.TCPUDPPort;
 
 public class TCPThread implements Runnable{
 
@@ -13,7 +14,7 @@ public class TCPThread implements Runnable{
     static ExecutorService pool = Executors.newCachedThreadPool();
 
     public TCPThread() throws IOException {
-        serverSocket = new ServerSocket(port);
+        serverSocket = new ServerSocket(TCPUDPPort);
     }
 
     @Override

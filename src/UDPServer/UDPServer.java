@@ -9,6 +9,8 @@ import java.util.HashMap;
 public class UDPServer {
 
     DatagramSocket UDPServerSocket;
+    static public int TCPUDPPort;
+
     public UDPServer(int port) throws SocketException {
         UDPServerSocket = new DatagramSocket(port);
     }
@@ -51,7 +53,7 @@ public class UDPServer {
 
                 } else if (tokens[1].equals("Chat")) {
                     if (clientInfos.containsKey((tokens[2]).trim())){
-                        response = "Info " + clientInfos.get(tokens[2].trim())[0] + " " + clientInfos.get(tokens[2].trim())[1];
+                        response = "Info " + tokens[2].trim() + " " + clientInfos.get(tokens[2].trim())[0] + " " + clientInfos.get(tokens[2].trim())[1];
                     }else response = "The client doesn't exist";
 
                 } else response = "Wrong keyword";
