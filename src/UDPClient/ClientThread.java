@@ -1,5 +1,7 @@
 package UDPClient;
 
+import TCPClient.Client;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,14 +9,18 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.HashMap;
 
 public class ClientThread implements Runnable{
 
     static public int port = 20002;
     DatagramSocket clientSocket;
+    HashMap<String, Client> friends = new HashMap<>();
+    String clientName;
 
-    public ClientThread() throws SocketException {
+    public ClientThread(String clientName) throws SocketException {
         clientSocket = new DatagramSocket(port++);
+        this.clientName = clientName;
     }
 
     @Override
@@ -31,14 +37,26 @@ public class ClientThread implements Runnable{
             if (line.startsWith("exit"))
                 break;
 
-            byte[] buffer = new byte[1024];
-            DatagramPacket receivedPacket = new DatagramPacket(buffer, buffer.length);
-            clientSocket.receive(receivedPacket);
+            if(line.startsWith("UDP") || line.startsWith("udp")){
+                byte[] buffer = new byte[1024];
+                DatagramPacket receivedPacket = new DatagramPacket(buffer, buffer.length);
+                clientSocket.receive(receivedPacket);
 
-            String receivedMessage = new String(receivedPacket.getData());
-            System.out.println("Received message: " + receivedMessage);
+                String receivedMessage = new String(receivedPacket.getData());
+                System.out.println("UDP Server: " + receivedMessage);
 
-            if (receivedMessage.startsWith("Info")){
+                if (receivedMessage.startsWith("Info")){
+                   String[] infos = receivedMessage.split(" ");
+                   Client client = new Client(infos[2].trim(), Integer.valueOf(infos[3].trim()));
+                   friends.put(infos[1].trim(),client);
+                }
+            }else {
+                String[] tokens = line.split(" ");
+                if(friends.containsKey(tokens[0].trim())){
+                    friends.get(tokens[0].trim()).run(clientName + ": " +tokens[1].trim());
+                }else {
+                    System.out.println("The user doesn't exist. First connect.");
+                }
 
             }
         }

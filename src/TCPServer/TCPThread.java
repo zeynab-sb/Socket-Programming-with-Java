@@ -19,11 +19,9 @@ public class TCPThread implements Runnable{
     @Override
     public void run() {
         while (true) {
-            System.out.println("TCP Server is listening");
             Socket connectionSocket = null;
             try {
                 connectionSocket = serverSocket.accept();
-                System.out.println("Server Socket find a new connection");
                 ConnectionThread serverThread = new ConnectionThread(connectionSocket);
                 pool.execute(serverThread);
             } catch (IOException e) {
