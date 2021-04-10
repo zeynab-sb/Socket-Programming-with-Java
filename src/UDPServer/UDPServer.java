@@ -1,3 +1,5 @@
+package UDPServer;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -15,11 +17,11 @@ public class UDPServer {
         HashMap<String,String[]> clientInfos = new HashMap<>();
 
         /**
-         * I'm {name} -- I'm Jack
+         * UDP|udp I'm {name} -- UDP|udp I'm Jack
          * Welcome {name} -- Welcome Jack OR You are already online
          */
         /**
-         * Chat {name} -- Chat Sara
+         * UDP|udp Chat {name} -- UDP|udp Chat Sara
          * {Sara's info} ip: , port:  OR The client doesn't exist
          */
         while (true) {
@@ -33,30 +35,30 @@ public class UDPServer {
             System.out.println("Packet Source IP: " + packet.getAddress().getHostAddress());
             System.out.println("Packet Source Port: " + packet.getPort());
 
-
-            if (receivedMessage.startsWith("I'm")) {
+            if(receivedMessage.startsWith("UDP") || receivedMessage.startsWith("udp")){
                 String[] tokens = receivedMessage.split(" ");
-                if (clientInfos.containsKey(tokens[1]))
-                    response = "You are already online";
-                else {
-                    String[] clientInfo = new String[2];
-                    clientInfo[0] = packet.getAddress().getHostAddress();
-                    clientInfo[1] = String.valueOf(packet.getPort());
-                    clientInfos.put(tokens[1].trim(),clientInfo);
-                    System.out.println(clientInfos.isEmpty());
-                    response = "Welcome " + tokens[1];
-                }
 
-            } else if (receivedMessage.startsWith("Chat")) {
-                String[] tokens = receivedMessage.split(" ");
-                if (clientInfos.containsKey((tokens[1]).trim())){
-                    response = "Info " + clientInfos.get(tokens[1].trim())[0] + " " + clientInfos.get(tokens[1].trim())[1];
-                }else response = "The client doesn't exist";
+                if (tokens[1].equals("I'm")) {
+                    if (clientInfos.containsKey(tokens[2]))
+                        response = "You are already online";
+                    else {
+                        String[] clientInfo = new String[2];
+                        clientInfo[0] = packet.getAddress().getHostAddress();
+                        clientInfo[1] = String.valueOf(packet.getPort());
+                        clientInfos.put(tokens[1].trim(),clientInfo);
+                        response = "Welcome " + tokens[1];
+                    }
 
-            } else response = "Wrong keyword";
-            DatagramPacket sendPacket = new DatagramPacket(response.getBytes(), response.getBytes().length,
-                    packet.getAddress(), packet.getPort());
-            UDPServerSocket.send(sendPacket);
+                } else if (tokens[1].equals("Chat")) {
+                    if (clientInfos.containsKey((tokens[2]).trim())){
+                        response = "Info " + clientInfos.get(tokens[2].trim())[0] + " " + clientInfos.get(tokens[2].trim())[1];
+                    }else response = "The client doesn't exist";
+
+                } else response = "Wrong keyword";
+                DatagramPacket sendPacket = new DatagramPacket(response.getBytes(), response.getBytes().length,
+                        packet.getAddress(), packet.getPort());
+                UDPServerSocket.send(sendPacket);
+            }
         }
     }
 
