@@ -19,8 +19,8 @@ public class UDPServer {
         HashMap<String,String[]> clientInfos = new HashMap<>();
 
         /**
-         * UDP|udp I'm {name} -- UDP|udp I'm Jack
-         * Welcome {name} -- Welcome Jack OR You are already online
+         * UDP|udp name {name} -- UDP|udp name Jack
+         * Welcome {name} -- Welcome Jack
          */
         /**
          * UDP|udp Chat {name} -- UDP|udp Chat Sara
@@ -40,10 +40,8 @@ public class UDPServer {
             if(receivedMessage.startsWith("UDP") || receivedMessage.startsWith("udp")){
                 String[] tokens = receivedMessage.split(" ");
 
-                if (tokens[1].equals("I'm")) {
-                    if (clientInfos.containsKey(tokens[2]))
-                        response = "You are already online";
-                    else {
+                if (tokens[1].equals("name")) {
+                    if (!clientInfos.containsKey(tokens[2])) {
                         String[] clientInfo = new String[2];
                         clientInfo[0] = packet.getAddress().getHostAddress();
                         clientInfo[1] = String.valueOf(packet.getPort());
