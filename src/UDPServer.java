@@ -3,7 +3,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class UDPServer {
 
@@ -13,7 +12,7 @@ public class UDPServer {
     }
 
     public void run() throws IOException {
-        Map<String,String[]> clientInfos = new HashMap<>();
+        HashMap<String,String[]> clientInfos = new HashMap<>();
 
         /**
          * I'm {name} -- I'm Jack
@@ -43,15 +42,15 @@ public class UDPServer {
                     String[] clientInfo = new String[2];
                     clientInfo[0] = packet.getAddress().getHostAddress();
                     clientInfo[1] = String.valueOf(packet.getPort());
-                    clientInfos.put(tokens[1],clientInfo);
-                    response = "Welcome" + tokens[1];
+                    clientInfos.put(tokens[1].trim(),clientInfo);
+                    System.out.println(clientInfos.isEmpty());
+                    response = "Welcome " + tokens[1];
                 }
 
             } else if (receivedMessage.startsWith("Chat")) {
                 String[] tokens = receivedMessage.split(" ");
-
-                if (clientInfos.containsKey(tokens[1])){
-                    response = clientInfos.get(tokens[1])[0] + " " + clientInfos.get(tokens[1])[1];
+                if (clientInfos.containsKey((tokens[1]).trim())){
+                    response = "Info " + clientInfos.get(tokens[1].trim())[0] + " " + clientInfos.get(tokens[1].trim())[1];
                 }else response = "The client doesn't exist";
 
             } else response = "Wrong keyword";
@@ -63,7 +62,7 @@ public class UDPServer {
 
     public static void main(String args[]){
         try {
-            UDPServer udpServer = new UDPServer(20000);
+            UDPServer udpServer = new UDPServer(20001);
             udpServer.run();
         } catch (SocketException e) {
             e.printStackTrace();
