@@ -30,7 +30,7 @@ public class ClientThread implements Runnable{
             sendMsgToUDPServer(firstMsg);
 
         while (true) {
-            System.out.println("Please enter your request: ");
+            System.out.println("> ");
             String line = consoleReader.readLine();
             if (line.startsWith("exit"))
                 break;

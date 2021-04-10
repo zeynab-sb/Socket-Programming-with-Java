@@ -17,8 +17,12 @@ public class ConnectionThread implements Runnable {
         while (true) {
             try {
                 String line = reader.readLine();
-                if(line!= null)
+                if(line!= null){
+                    System.out.println("********************************************************");
                     System.out.println(line);
+                    System.out.println("********************************************************");
+                    System.out.println("> ");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
