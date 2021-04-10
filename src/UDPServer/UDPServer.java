@@ -45,8 +45,8 @@ public class UDPServer {
                         String[] clientInfo = new String[2];
                         clientInfo[0] = packet.getAddress().getHostAddress();
                         clientInfo[1] = String.valueOf(packet.getPort());
-                        clientInfos.put(tokens[1].trim(),clientInfo);
-                        response = "Welcome " + tokens[1];
+                        clientInfos.put(tokens[2].trim(),clientInfo);
+                        response = "Welcome " + tokens[2];
                     }
 
                 } else if (tokens[1].equals("Chat")) {
